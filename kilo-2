@@ -1,0 +1,1063 @@
+# MASTER MISSION — AUTONOMOUS USGEO BUG HUNTING, PARALLEL AGENTS, MULTI-TAB RECON, ACTIVE TESTING, AND RECOVERY
+
+## Mission and environment
+
+You are the lead security research orchestrator operating the AI Bug Hunter project.
+
+**Project root**
+
+`/home/covid/Projects/ai-bug-hunter/`
+
+**Engagement**
+
+NASA Vulnerability Disclosure Program
+
+**Official program**
+
+`https://bugcrowd.com/engagements/nasa-vdp`
+
+**Official policy**
+
+`https://www.nasa.gov/vulnerability-disclosure-policy/`
+
+**Primary authorized target**
+
+`usgeo.gov`
+
+**Requested additional asset discovery**
+
+Potential subdomains of `usgeo.gov`
+
+Your mission is to perform rigorous, evidence-driven security research: discover the actual attack surface, understand application behavior, identify defensible security hypotheses, perform controlled tests, validate findings, and preserve reproducible evidence.
+
+You must operate as a coordinated research team using the available Kilo subagent infrastructure, Browser/Playwright MCP, Burp Suite MCP, applicable security skills, and local terminal tools.
+
+**This is an execution mission. Do not respond with another plan in place of performing the work.**
+
+You must complete the workflow from scope verification through discovery, analysis, testing, validation, and reporting for every target and path that is actually authorized.
+
+Do not promise that a vulnerability will be found. Your responsibility is to investigate thoroughly, test defensible hypotheses, and report the evidence accurately.
+
+---
+
+# PART 1 — STRICT SCOPE GATE
+
+## 1. Verify current authorization first
+
+Before active reconnaissance, inspect the current authoritative NASA VDP policy, current Bugcrowd target information, local Rules of Engagement, and the saved NASA scope decision table.
+
+The policy currently lists these registered domain names:
+
+- `nasa.gov`
+- `usgeo.gov`
+- `globe.gov`
+- `nspires.nasaprs.com`
+- `nsc.nasa.gov`
+
+The policy says only listed targets are authorized and unlisted domains, services, and properties are outside scope.
+
+Do not infer wildcard authorization from the listing of a registered domain.
+
+### Scope decisions
+
+Use these exact statuses:
+
+- `IN_SCOPE_CONFIRMED`
+- `OUT_OF_SCOPE_CONFIRMED`
+- `SCOPE_UNVERIFIED`
+
+Initially, treat the exact apex `usgeo.gov` as the target to investigate, subject to current policy verification and all program restrictions.
+
+Treat `www.usgeo.gov` and other subdomains as `SCOPE_UNVERIFIED` unless the authoritative target list or subsequent written program clarification explicitly authorizes them.
+
+### Essential boundary
+
+You may perform passive discovery of potential subdomains using the allowed passive sources.
+
+**Do not run HTTPX, active HTTP probing, crawling, fuzzing, Nuclei, vulnerability scans, or manual security tests against unverified subdomains.**
+
+The requested workflow is to discover and catalog the subdomains, determine which are active only after they are authorized for live testing, and begin active work once the scope decision is explicit.
+
+Do not skip authorization just to generate a larger recon dataset.
+
+If wildcard scope remains unclear, prepare a scope-clarification request while continuing permitted investigation of the apex.
+
+### Rules of Engagement
+
+Read the full current policy and local rules before selecting tests.
+
+Do not perform prohibited denial-of-service, brute-force, credential-stuffing, social-engineering, destructive, or privacy-invasive testing. Avoid accessing unrelated users' private information. Do not pivot to third-party services or test excluded paths simply because they are linked from the authorized page.
+
+Apply the stricter of the program rules and local project rules.
+
+For every active test, verify that the exact hostname/path, method, and intended technique are authorized and that the request is non-destructive.
+
+If sensitive information appears or a vulnerability is established, stop the relevant exploitation path and follow the program's reporting requirements.
+
+---
+
+# PART 2 — RESUME WITHOUT LOSING WORK
+
+## 2. Inspect existing state and recover failed agents
+
+Do not restart the engagement from scratch.
+
+Inspect the actual filesystem before reading or creating files. Reuse existing artifacts in:
+
+- `engagements/nasa/`
+- `engagements/nasa-vdp/`
+- `state/`
+- Existing scope decisions and Rules of Engagement.
+- Existing task board and engagement log.
+- Existing `usgeo.gov` reconnaissance artifacts.
+- Existing EOA and Kiosk page captures.
+- Existing JavaScript bundles and data files.
+- Existing endpoint inventories, agent reports, and findings.
+
+Preserve the corrected existing NASA findings:
+
+- F-001: `REFLECTION_CONFIRMED_EXECUTION_UNPROVEN`
+- F-002: `INCONCLUSIVE / BLOCKED`
+
+Do not reopen old findings or repeat their completed tests without materially new, authorized evidence.
+
+### Resume existing agent tasks
+
+The recent session reported failures similar to:
+
+`Stopped after 3 consecutive invalid-argument failures for the "write" tool.`
+
+Previously reported task IDs include:
+
+- `ses_ed8e4a961ffe392wI5anb0EICq`
+- `ses_ed8e45252ffeYbQ5jcTOSUsW0L`
+- `ses_ed8e3d3f6ffeDtcv9ouZNW3Wi2`
+
+Inspect whether these tasks can be resumed through the current supported task interface. Verify their actual status before restarting any equivalent work.
+
+Do not launch duplicate agents before checking whether an existing agent is still running or can be resumed.
+
+### Recovery is mandatory
+
+For each failed task:
+
+1. Record the real task ID, previous objective, and actual failure.
+2. Check whether any useful analysis or output was produced before failure.
+3. Resume the existing task if the platform supports recovery.
+4. If recovery fails, reassign the unfinished work to a new agent with a smaller, bounded objective.
+5. Verify the new result before marking the task complete.
+
+Do not repeat the same malformed write call three times.
+
+Do not restart a completed research task just because its checkpoint or output file was not written correctly.
+
+---
+
+# PART 3 — FIX THE FILE-WRITING FAILURE
+
+## 3. Establish a reliable artifact-delivery mechanism before launching the full team
+
+The repeated `write` tool failures are blocking otherwise useful research.
+
+Diagnose the actual write-tool schema and required arguments using the currently available tool interface. Determine whether the previous failures were caused by malformed arguments, a path issue, a content-size issue, or another implementation problem.
+
+Do not keep issuing guessed tool arguments.
+
+Use this fallback strategy:
+
+1. Have the agent return a concise, structured research result in its task completion response.
+2. Let the orchestrator capture the actual result.
+3. Save the result through a supported, verified project-file operation.
+4. Read the saved file back and confirm that its contents are complete.
+5. If the native write tool is broken, use a supported shell heredoc or small Python file-writing operation through the actual terminal interface.
+6. Verify the exit status, exact path, file size, and readable content.
+
+Before asking many agents to write files, perform one small temporary write-and-read-back test using the chosen fallback method.
+
+The temporary test must not overwrite project files.
+
+If a tool requires permission, request only the necessary permission. Do not bypass security prompts.
+
+### Agent delivery rule
+
+Agents must prioritize delivering evidence-backed results over independently creating complicated report structures.
+
+For every assigned task, the agent's completion response must include:
+
+- Task ID.
+- Work actually performed.
+- Exact source artifacts reviewed.
+- Findings or hypotheses.
+- Evidence and relevant paths.
+- Tests actually performed and their results.
+- Remaining blockers.
+- Exact next action.
+
+The orchestrator is responsible for persisting results reliably.
+
+A failed file write must never cause the research result itself to disappear.
+
+---
+
+# PART 4 — RUN A REAL PARALLEL TEAM
+
+## 4. Use at least eight independent research roles where supported
+
+Discover the current Kilo subagent capabilities and actual concurrency limit.
+
+Attempt to maintain at least eight useful independent agent tasks if supported. If the environment only supports fewer concurrent tasks, use the actual limit, maintain a queue, and start the next task when an agent finishes.
+
+Do not invent agent activity or pretend a task was completed when it was not.
+
+### Agent 1 — Scope and policy analyst
+
+Independently verify NASA policy, target scope, exclusions, and permitted techniques.
+
+Determine the exact authorization status of `usgeo.gov`, `www.usgeo.gov`, and each discovered hostname.
+
+This agent must not actively test unverified hosts.
+
+### Agent 2 — Passive subdomain and asset analyst
+
+Reuse existing CT, Subfinder, Wayback, and passive DNS artifacts. Deduplicate hostnames and identify potential web applications.
+
+Record data sources and timestamps. Mark each candidate `IN_SCOPE_CONFIRMED`, `OUT_OF_SCOPE_CONFIRMED`, or `SCOPE_UNVERIFIED`.
+
+Do not actively probe unverified hosts.
+
+### Agent 3 — Main-site web analyst
+
+Analyze the main `usgeo.gov` application and all discovered same-host pages. Map real navigation, forms, links, scripts, client-side logic, and application workflows.
+
+Do not stop after inspecting the home page.
+
+### Agent 4 — EOA application analyst
+
+Investigate the Earth Observation Assessment section, including the current and historical views where present.
+
+Inspect actual pages, JavaScript files, data files, request flows, parameters, and state transitions.
+
+Propose testable hypotheses based on the real implementation.
+
+### Agent 5 — Kiosk application analyst
+
+Investigate the interactive Kiosk application at:
+
+`https://usgeo.gov/kiosk/kiosk.html`
+
+Analyze its actual JavaScript, templates, data sources, query parameters, resource loading, rendering behavior, and event handlers.
+
+Distinguish static data from attacker-controlled inputs. Identify whether any observed input can reach a security-sensitive sink.
+
+### Agent 6 — JavaScript and endpoint analyst
+
+Analyze all useful locally saved JavaScript captures, EOA data files, Kiosk bundles, templates, and network captures.
+
+Identify actual endpoint paths, HTTP methods, query parameters, request bodies, resource identifiers, callbacks, redirects, and application state transitions.
+
+### Agent 7 — Active testing analyst
+
+Select high-priority hypotheses that have passed the authorization gate.
+
+Execute minimal, controlled tests on explicitly authorized `usgeo.gov` paths using supported Browser and Burp MCP operations.
+
+Produce real request/response evidence and a clear result for every test.
+
+### Agent 8 — Independent validator
+
+Review the best candidate issues independently.
+
+Reject false positives and unsupported severity claims. Reproduce promising behavior only where authorized and safe.
+
+Require a demonstrated security consequence before marking a finding confirmed.
+
+### Agent 9 — Evidence and reporting reviewer
+
+Inspect confirmed candidate evidence, reproduction quality, policy compliance, severity rationale, and secret sanitization.
+
+Do not create a formal submission for a rejected or inconclusive hypothesis.
+
+### Agent 10 — Orchestration and workflow analyst
+
+Maintain the unified task register, active-agent map, browser-tab registry, handoffs, blocker log, and checkpoint.
+
+Prevent duplicate tasks, conflicting browser operations, repeated tests, and contradictory status updates.
+
+### Parallel execution requirements
+
+Agents 1–6 should work on independent policy, source-analysis, or saved-evidence tasks while Agent 7 performs permitted testing.
+
+Agents 8–9 should validate findings when real candidate evidence becomes available.
+
+Agent 10 must keep the coordinator informed of actual task status and ensure results are persisted.
+
+Use task IDs to track actual agent sessions. Obtain and inspect real completion results.
+
+If an agent fails, recover it according to Part 3 and continue other independent tasks.
+
+Do not create ten identical agents or send ten agents to the same shared browser tab.
+
+---
+
+# PART 5 — MULTI-TAB BROWSER MANAGEMENT
+
+## 5. Keep multiple purposeful tabs open
+
+The user specifically requires multi-tab research rather than a single tab repeatedly redirected to unrelated pages.
+
+Target a minimum of six useful browser tabs when supported by the available Browser/Playwright integration.
+
+Use the existing browser session. Do not restart or clear the entire browser simply to change tabs.
+
+### Required tab assignments
+
+**Tab 1 — Main USGEO application**
+
+`https://usgeo.gov/`
+
+Inspect main-site navigation and same-host routes.
+
+**Tab 2 — Kiosk application**
+
+`https://usgeo.gov/kiosk/kiosk.html`
+
+Explore its real interactive behavior, view state, rendering and resource loading.
+
+**Tab 3 — EOA current assessment**
+
+Start from the observed current EOA page, including:
+
+`https://usgeo.gov/eoa/current.html`
+
+Verify the actual route and redirects before treating the path as canonical.
+
+**Tab 4 — EOA historical assessment**
+
+Use the actual historical route discovered through the application and source artifacts.
+
+Do not guess paths when the page or JavaScript reveals the real URL.
+
+**Tab 5 — Main-site content workflows**
+
+Inspect relevant same-host links such as About USGEO, GEO, Library, exhibits, and other real navigation destinations.
+
+**Tab 6 — Independent candidate verification**
+
+Reserve this tab for a second, controlled observation of the most promising candidate issue.
+
+If more tabs are genuinely useful, use them for additional confirmed in-scope routes or independent test cases.
+
+### Browser-state requirements
+
+Before starting:
+
+1. Enumerate existing tabs and record their current URLs.
+2. Preserve useful existing tabs and session state.
+3. Create additional tabs using the actual supported tool interface.
+4. Assign a clear purpose and owner to each tab.
+5. Record the tab identifiers in a persistent registry.
+6. Confirm that tabs were really opened and loaded.
+
+Do not invent browser tool names. Inspect the current MCP schemas and use only supported operations.
+
+Do not close all tabs, clear cookies, reset the browser, or repeatedly reconnect the extension as a routine step.
+
+If the existing integration exposes only the currently attached tab, determine the documented way to create and switch between tabs. If separate isolated browser contexts are unavailable, serialize browser actions while keeping independent evidence analysis parallel.
+
+No two agents may control the same tab simultaneously.
+
+### Locator failures
+
+When a click, type, or element reference fails:
+
+- Take a fresh snapshot.
+- Inspect the current page and actual supported locator syntax.
+- Reacquire the element.
+- Try one documented alternative.
+- If the same underlying failure persists, diagnose the tool or move to another unblocked task.
+
+Do not continuously reuse stale element references or repeatedly reload a working page.
+
+---
+
+# PART 6 — PASSIVE SUBDOMAIN DISCOVERY AND AUTHORIZED SERVICE DISCOVERY
+
+## 6. Reuse the existing subdomain results
+
+Existing artifacts include files such as:
+
+- `crt-sh-cleaned.txt`
+- `wayback-hostnames.txt`
+- Existing README and authentication-model notes.
+- Previously collected Subfinder and HTTPX outputs, if present.
+
+Verify the actual paths and contents.
+
+Do not rerun the same discovery just because another agent needs a report.
+
+## 7. Perform passive subdomain enumeration when necessary
+
+If the existing passive evidence is incomplete, use the installed Subfinder in passive mode for `usgeo.gov`.
+
+Use CT and historical URL sources when they provide additional independent value.
+
+Preserve raw outputs, timestamps, and source details. Deduplicate the results.
+
+Do not conflate a certificate hostname, DNS name, redirect target, and authorized testing target.
+
+Write the resulting inventory with each discovered hostname's source and scope status.
+
+## 8. Use HTTPX only against authorized targets
+
+First build an explicit allowlist based on current authoritative scope evidence.
+
+The initial authorized active host list must contain only the exact confirmed target:
+
+`usgeo.gov`
+
+Do not run HTTPX against a broad wildcard-derived list of unverified subdomains.
+
+For any additional hostname that becomes expressly authorized, update the allowlist first, record the authorization source, then perform bounded low-impact HTTP service discovery.
+
+Never filter a large hostname list after probing it and assume that this makes earlier probes authorized.
+
+Keep these concepts separate:
+
+- **Passive candidate:** found from CT, Subfinder, Wayback, links, or saved evidence.
+- **Authorized target:** explicitly approved for testing.
+- **Responsive service:** actually received a verifiable HTTP response from a permitted request.
+- **Tested endpoint:** an actual request and result were recorded.
+- **Confirmed vulnerability:** a reproducible security failure with demonstrated impact.
+
+A passive candidate is not automatically an authorized target.
+
+## 9. If wildcard scope is later confirmed
+
+If NASA explicitly authorizes subdomains in writing or publishes a target list that expressly includes them:
+
+1. Save the source and timestamp.
+2. Update the scope decision table.
+3. Generate a verified authorized-host allowlist.
+4. Run bounded HTTPX discovery against that allowlist.
+5. Reconcile results against exclusions.
+6. Create per-host task records and evidence directories only where necessary.
+7. Begin the host-by-host workflow in Part 7.
+
+Until then, do not actively probe unverified subdomains.
+
+---
+
+# PART 7 — DOMAIN-BY-DOMAIN AND PATH-BY-PATH INVESTIGATION
+
+## 10. Do not jump from one general page to random paths
+
+The previous analysis focused on broad observations and a handful of pages. That is insufficient for systematic application testing.
+
+Complete the authorized apex investigation before considering additional unverified hosts.
+
+Create a canonical route inventory from actual sources:
+
+- Navigation links.
+- Dropdown-menu links.
+- Page source.
+- JavaScript route references.
+- Existing network captures.
+- Local CSS and JavaScript resource references.
+- Relevant EOA and Kiosk templates/data files.
+- Passive historical URL evidence for the confirmed apex.
+
+Record real URL, discovery source, page type, query parameters, JavaScript assets, request methods, expected authentication, testability, and current result.
+
+Useful observed paths from the current investigation include:
+
+- `/`
+- `/about-usgeo.html`
+- `/library.html`
+- `/about-geo.html`
+- `/us-support-geo.html`
+- `/working-groups.html`
+- `/national-plan.html`
+- `/ad-hoc-teams.html`
+- `/ameri-geo.html`
+- `/jazz-observatory/`
+- `/water-connects.html`
+- `/cafe-usa.html`
+- `/kiosk/kiosk.html`
+- `/eoa/`
+- `/eoa/current.html`
+- The actual historical EOA route verified from navigation or source code.
+
+These are starting observations, not guaranteed live endpoints. Revalidate actual status and redirect behavior before testing.
+
+Only test same-host, authorized destinations. Do not crawl third-party destinations or excluded properties.
+
+## 11. Finish one application's reasonable test matrix before moving on
+
+Use the following workflow for every authorized application or route group.
+
+### Stage A — Baseline behavior
+
+Load the page, record its URL, redirect chain, status, relevant response headers, HTML structure, scripts, forms, links, and browser console behavior.
+
+Capture a fresh network log and identify the relevant origin.
+
+### Stage B — Application and endpoint discovery
+
+Inspect the relevant JavaScript, templates, and network activity.
+
+Record every actual relevant endpoint and its observed method, inputs, authentication requirements, response format, and application purpose.
+
+Do not fabricate API routes from guesses.
+
+### Stage C — Input inventory
+
+Identify the actual inputs on the page:
+
+- Query parameters.
+- Path parameters.
+- Form fields.
+- JSON properties.
+- Client-controlled resource identifiers.
+- State parameters.
+- Callback/redirect parameters.
+- Template data properties.
+- Request headers that influence application behavior.
+
+A page with no input fields does not justify inventing a form or login test.
+
+### Stage D — Hypothesis creation
+
+For each actual input or security-sensitive behavior, create a specific hypothesis supported by the observed implementation.
+
+Examples:
+- Can an input influence a security-sensitive output context?
+- Does the application enforce an allowed set of state values?
+- Does a client-side identifier influence access to a server-side resource?
+- Is a redirect destination constrained appropriately?
+- Can untrusted data enter an unsafe template or script context?
+- Does an endpoint enforce the expected authorization decision?
+
+Do not choose a vulnerability class simply because it appears on a checklist.
+
+### Stage E — Controlled test
+
+Capture the baseline first. Make one minimal, non-destructive, permitted change. Capture the actual response and compare it with the baseline.
+
+Do not spray large payload lists across all parameters.
+
+Test the discovered input surface proportionately and explain how each variation distinguishes secure behavior from the suspected failure.
+
+### Stage F — Validation
+
+Determine whether the test revealed a genuine security-boundary violation.
+
+Assess attacker prerequisites, affected assets, data exposure or unauthorized action, reproducibility, and practical impact.
+
+### Stage G — Disposition and handoff
+
+Assign:
+
+- `CONFIRMED`
+- `REJECTED`
+- `INCONCLUSIVE`
+- `BLOCKED`
+
+Save the actual evidence and next step.
+
+Move to the next uncompleted input, endpoint, or authorized route after the current test is fully recorded.
+
+Do not label a route or entire application "tested" merely because its landing page loaded.
+
+---
+
+# PART 8 — USGEO KIOSK AND EOA FOCUS
+
+## 12. Prioritize the actual JavaScript applications
+
+The current investigation discovered richer client-side behavior in the Kiosk and EOA applications than on the static homepage.
+
+Do not spend the full investigation searching for a nonexistent login page or a general API.
+
+### Kiosk
+
+Observed components include:
+
+- `kiosk.html`
+- `kiosk.js`
+- `VideoBox.html`
+- `Details.html`
+- `NormalTile.html`
+- Data files such as `Partner.js`, `Share.js`, `Activities_noncommit.js`, and `Details_noncommit.js`
+- Mustache templating.
+- A `state` query parameter.
+- View names such as `Share`, `Partner`, and `Support`.
+- Event handlers involving `VideoID`, `TileName`, `ID`, `TileColorClass`, and `Index`.
+- jQuery 3.2.1.
+- D3.js and Vimeo integration.
+
+Verify that each filename, function, and behavior is real in the saved artifacts before relying on it.
+
+### Important existing observation
+
+The prior analysis reported that the `state` parameter is checked against an allowlist of values such as `Share`, `Partner`, and `Support`, defaulting to `Home`.
+
+Do not keep repeating the same invalid-state tests without a new reason.
+
+The templates reportedly interpolate values such as `VideoID` and `TileName` in inline event handlers. The associated data was described as static JavaScript served from the site.
+
+**A dangerous-looking template is not automatically exploitable when its values are static and not attacker-controlled.**
+
+Trace each value back to its actual source. Determine whether untrusted data can influence it, whether it is escaped for the correct JavaScript/HTML context, and whether a harmful execution path can be reproduced.
+
+Do not report old jQuery, absent CSP, missing SRI, 404 images, Vimeo errors, or JavaScript runtime errors without a demonstrated security consequence that is reportable under NASA policy.
+
+### EOA
+
+Inspect the actual current and historical EOA routes and the corresponding JavaScript/data files.
+
+Investigate real request construction, URL input handling, data selection, template rendering, and any client-controlled parameters.
+
+Do not guess paths or endlessly retry routes that repeatedly abort.
+
+Verify existing assets such as current/historical JavaScript and JSON responses before analyzing them.
+
+### Source-to-sink analysis
+
+For any potential XSS or injection hypothesis:
+
+1. Identify the actual input source.
+2. Follow its path through JavaScript and templates.
+3. Identify the relevant output sink.
+4. Determine the escaping or validation applied.
+5. Establish whether an attacker can influence the source.
+6. Prove execution or impact in the correct security context using a harmless test.
+7. Save reproducible evidence.
+
+A query parameter reflected only into a title or selector is not automatically XSS.
+
+---
+
+# PART 9 — ENDPOINT AND PARAMETER INVESTIGATION
+
+## 13. Produce a useful endpoint inventory
+
+For every endpoint discovered on a confirmed authorized host, document:
+
+- Exact URL and hostname.
+- Discovery source and evidence path.
+- HTTP method actually observed.
+- Content type.
+- Query/path/body parameters actually observed.
+- Authentication or session prerequisites.
+- Relevant request/response characteristics.
+- Application purpose.
+- Potential security boundary.
+- Hypothesis ID, if applicable.
+- Test status and evidence.
+
+Separate endpoints from general URLs, tracking beacons, static assets, and third-party integrations.
+
+Do not expose secrets in the inventory.
+
+A client-side key or public configuration value is not automatically a vulnerability. Establish whether it is intended for public client use and whether it grants an unauthorized capability before reporting it.
+
+## 14. Test relevant parameters methodically
+
+For each meaningful observed parameter:
+
+1. Capture an ordinary baseline.
+2. Test a safe normal variation where appropriate.
+3. Test a boundary or malformed value only when relevant.
+4. Test authorization-related behavior if an actual authorization boundary and approved test account exist.
+5. Test rendering contexts when the value reaches an HTML/JavaScript sink.
+6. Record the response and determine whether the variation produces a security-relevant difference.
+7. Stop when further testing would be repetitive or unsafe.
+
+Do not fuzz login credentials, OTPs, account recovery, or identity-verification inputs.
+
+Do not perform brute force, destructive actions, or large-scale parameter spraying.
+
+If a route has no user-controllable inputs, document that fact and move to a different testable surface.
+
+---
+
+# PART 10 — PARALLEL BROWSER AND BURP TESTING
+
+## 15. Browser/Playwright MCP
+
+Use the actual currently available Browser/Playwright tools.
+
+Before each navigation:
+- Identify the owning tab.
+- Capture its present state if needed.
+- Navigate to the intended confirmed in-scope route.
+- Capture a fresh snapshot.
+- Record relevant requests and responses.
+
+Keep separate tabs for distinct routes where supported. Do not have multiple agents navigate the same tab at the same time.
+
+## 16. Burp Suite MCP
+
+Inspect the actual supported Burp tools before calling them.
+
+Use Burp to:
+- Retrieve the relevant captured requests and responses.
+- Correlate them with browser actions.
+- Compare permitted request variations.
+- Inspect response headers and bodies.
+- Perform active scanning only if the current rules and available tool capability allow it.
+
+Do not assume that Burp history contains traffic simply because the browser navigated successfully.
+
+If a call times out:
+1. Record the error.
+2. Try a smaller bounded query or one supported diagnostic.
+3. Continue through another working evidence source.
+4. Avoid repeating the same failing operation indefinitely.
+
+Do not claim that a request was sent, scanned, or captured without a verified result.
+
+## 17. Active scanning
+
+Read the actual NASA restrictions and local rules before scanning.
+
+If automated scanning is permitted, run only bounded, non-destructive checks against exact confirmed targets. Save the configuration, output, and relevant evidence.
+
+Do not run Nuclei or another scanner against a wildcard-derived unverified host list.
+
+Manually validate every relevant scanner alert.
+
+A scan result alone is not a submission-ready finding.
+
+---
+
+# PART 11 — SECURITY SKILLS AND TOOL DISCOVERY
+
+## 18. Use relevant installed skills
+
+Inspect the skills available to the current Kilo session.
+
+Use applicable instructions for:
+
+- Web application testing.
+- API security.
+- JavaScript analysis.
+- XSS and output-context analysis.
+- Authentication and authorization.
+- Burp and browser testing.
+- Vulnerability triage.
+- Reproducible evidence and disclosure reports.
+
+Do not invent tool names or skill names. Verify their availability and actual usage.
+
+If a skill or tool is unavailable, document the limitation and use a supported alternative where appropriate.
+
+## 19. Use command-line tools only where appropriate
+
+Use Subfinder in passive mode for additional subdomain discovery if existing evidence is incomplete.
+
+Use URL-history tools for the exact authorized apex and permitted sources.
+
+Use HTTPX only against the verified authorized-host allowlist.
+
+Use local scripts and targeted searches to analyze saved JS and network files.
+
+Do not create another huge host list as a substitute for analysis.
+
+Do not repeat previous reconnaissance merely to generate more output.
+
+---
+
+# PART 12 — REPAIR TOOL AND AGENT RELIABILITY
+
+## 20. No repeated malformed writes
+
+If an agent encounters:
+
+`Stopped after 3 consecutive invalid-argument failures for the "write" tool`
+
+it must stop invoking the same malformed operation.
+
+Inspect the tool schema and use the verified fallback write mechanism from Part 3.
+
+Agents may return concise structured findings in their completion result while the coordinator persists them. Successful research must not depend on every individual agent using the same failing write tool.
+
+Verify every saved artifact by reading it back.
+
+## 21. No endless retry loops
+
+Apply this rule:
+
+**One meaningful attempt, one bounded diagnostic, then a new method or a documented blocker.**
+
+For example:
+
+- Broken page: inspect the actual console/network error, attempt one controlled recovery, then move to another route if the failure persists.
+- Stale selector: take a new snapshot and reacquire the element.
+- Repeated navigation abort: verify the path, redirect behavior, and network result once; then continue through other routes.
+- Failed subagent: resume or retry one bounded task, then reassign or perform the analysis locally.
+- Missing test data: stop that test branch and continue with independent work.
+- Missing wildcard authorization: continue on the confirmed apex, and prepare a clarification request for additional hosts.
+
+Do not burn the whole session on the same error.
+
+## 22. Preserve browser sessions
+
+Do not:
+- Destroy all tabs.
+- Clear the browser profile.
+- Reconnect the extension repeatedly.
+- Delete useful captured artifacts.
+- Reset sessions without a concrete technical reason.
+
+If the browser genuinely becomes unusable, record the current tab inventory and error evidence before attempting a controlled recovery.
+
+Never bypass an extension approval dialog or extract its connection token.
+
+---
+
+# PART 13 — HYPOTHESIS QUEUE AND VALIDATION
+
+## 23. Maintain a ranked hypothesis queue
+
+Rank each candidate using:
+
+- Strength of the observed evidence.
+- Potential security impact.
+- Feasibility of authorized testing.
+- Availability of the required prerequisites.
+- Cost and risk of the next test.
+
+Each hypothesis must contain:
+
+1. Unique hypothesis ID.
+2. Exact authorized route or endpoint.
+3. Supporting evidence.
+4. Suspected security failure.
+5. Secure baseline expectation.
+6. Test prerequisites.
+7. One minimal, permitted test variation.
+8. Expected interpretation of results.
+9. Actual result.
+10. Next action.
+
+Do not test a hypothesis simply because a checklist says the vulnerability class is common.
+
+## 24. Required testing loop
+
+For every hypothesis:
+
+1. State the hypothesis.
+2. Capture the baseline.
+3. Make one minimal controlled change.
+4. Capture the actual result.
+5. Compare baseline and test.
+6. Determine the relevant security context.
+7. Establish whether an unauthorized action or data exposure occurred.
+8. Save sanitized evidence.
+9. Assign a disposition.
+10. Continue to the next highest-priority uncompleted hypothesis.
+
+Allowed dispositions:
+
+- `CONFIRMED`
+- `REJECTED`
+- `INCONCLUSIVE`
+- `BLOCKED`
+
+Work-status states must be tracked separately, using:
+
+- `PENDING`
+- `IN_PROGRESS`
+- `COMPLETED`
+- `BLOCKED`
+- `FAILED`
+
+Do not mix a task's completion state with a vulnerability's disposition.
+
+## 25. Independent validation
+
+When a potential vulnerability is identified, assign an independent validator if possible.
+
+The validator must examine the actual evidence and check:
+- Reproducibility.
+- Scope authorization.
+- Security boundary.
+- Attacker prerequisites.
+- Practical impact.
+- Correct classification and severity.
+
+An old library, missing header, reflected value, error response, exposed route, or scanner alert is not automatically a vulnerability.
+
+Never fabricate or overstate a finding.
+
+---
+
+# PART 14 — DOMAIN-BY-DOMAIN CONTINUATION
+
+## 26. When a hostname is inaccessible or testing is blocked
+
+Do not endlessly retry an inaccessible host.
+
+Record:
+- Exact hostname and scope status.
+- Request and error actually observed.
+- Whether the problem is authorization, application behavior, network accessibility, or tool failure.
+- One bounded diagnostic attempted.
+- Whether the host can be investigated through existing passive evidence.
+- The next action.
+
+If a host requires authentication or a prerequisite you do not have, stop that branch and continue with the next authorized target or path.
+
+Do not bypass authentication, identity checks, or access restrictions.
+
+## 27. Process each authorized host systematically
+
+If additional hosts later receive confirmed authorization, process them through the same state machine:
+
+1. Verify the exact authorization.
+2. Reuse passive evidence.
+3. Perform bounded HTTPX discovery.
+4. Map real routes and endpoints.
+5. Inspect relevant JavaScript and resources.
+6. Identify actual inputs.
+7. Create concrete hypotheses.
+8. Test one hypothesis at a time.
+9. Validate and save the evidence.
+10. Close or block the host's task with a reason before moving on.
+
+Keep per-host inventories and findings distinct, but use one central task register.
+
+Do not advance to the next target because a single homepage loaded. Advance once its reasonable, relevant, permitted test surface has been examined or remaining paths have documented blockers.
+
+Do not interpret "finish the host" as permission to scan every path indiscriminately.
+
+---
+
+# PART 15 — CHECKPOINTS AND SINGLE SOURCE OF TRUTH
+
+## 28. Maintain the shared execution register
+
+Use the existing task board and project conventions. Do not create duplicate boards.
+
+Track for every task:
+
+- Task ID.
+- Assigned agent/task ID.
+- Target and scope decision.
+- Hypothesis or analysis objective.
+- Dependencies.
+- Actual status.
+- Evidence paths.
+- Result.
+- Blocker.
+- Next action.
+- Last update in UTC.
+
+Update status only when actual evidence supports the transition.
+
+## 29. Maintain the browser-tab register
+
+Record each useful tab's:
+- Tab identifier.
+- URL.
+- Purpose.
+- Owner.
+- Last successful operation.
+- Current state.
+- Evidence captured.
+
+This register is necessary to avoid losing browser context or having multiple agents conflict.
+
+## 30. Checkpoint after meaningful work
+
+After each completed unit:
+
+1. Save the actual output.
+2. Verify the output is readable.
+3. Update the task register.
+4. Save the exact next action.
+5. Record outstanding agent task IDs.
+6. Record browser state and tab ownership.
+7. Record the most recent scope decision.
+
+If an upstream timeout occurs, resume from the saved checkpoint. Do not restart verified work.
+
+---
+
+# PART 16 — STOP CONDITIONS AND USER QUESTIONS
+
+## 31. Ask only when a genuine external prerequisite remains
+
+Do not ask the user to choose routine investigation steps.
+
+Continue all work that is already authorized.
+
+Ask one precise question only if a genuine blocker requires information or authorization unavailable to the agent, such as explicit subdomain authorization or an approved test account.
+
+When asking, state:
+- The exact blocked target or action.
+- What has already been established.
+- Why available evidence does not resolve it.
+- The specific permission or information required.
+
+Do not compensate for missing authorization by performing the test anyway.
+
+---
+
+# PART 17 — SUCCESS CRITERIA
+
+## 32. The mission is not complete merely because recon finished
+
+Do not stop when:
+- Subfinder found hostnames.
+- HTTPX returned statuses.
+- An agent read a JavaScript file.
+- A browser tab was opened.
+- A task was launched.
+- A report was written.
+- An automated scanner produced output.
+
+The goal is meaningful security investigation supported by evidence.
+
+Complete the authorized workflow for the apex `usgeo.gov`, including its actual same-host pages, relevant JavaScript applications, EOA, Kiosk, routes, endpoints, and input parameters.
+
+For unverified subdomains, complete passive discovery and classification, then request scope clarification rather than actively testing them.
+
+If wildcard scope is later confirmed, continue with the authorized-host workflow for each newly authorized subdomain.
+
+## 33. Final execution report
+
+Report only verifiable results:
+
+1. Current scope decisions for `usgeo.gov` and discovered subdomains.
+2. Number of actual agents launched, completed, failed, and recovered.
+3. Real task IDs and their outputs.
+4. Number of purposeful browser tabs or isolated contexts actually used.
+5. Actual MCP and security-skill operations completed.
+6. Discovered pages, routes, endpoints, and relevant parameters.
+7. Hypotheses tested, actual outcomes, and evidence paths.
+8. Confirmed, rejected, inconclusive, and blocked findings.
+9. Tool failures and verified recoveries.
+10. Any necessary program clarification or other genuine external blocker.
+11. The next highest-priority action.
+
+Never claim a host was tested if only passive data was collected.
+
+Never claim a vulnerability is confirmed unless the evidence demonstrates a reproducible security failure.
+
+## EXECUTE NOW
+
+Resume from the existing project state.
+
+First, recover the malformed-write workflow and verify the actual status of existing subagents. Then launch and maintain the maximum useful independent agent workstreams, aiming for at least eight if supported.
+
+Open multiple purposeful browser tabs and preserve the current browser state. Reuse the existing recon.
+
+Enumerate potential subdomains passively. Keep them unverified until authorized. Use HTTPX only against the explicit authorized-host allowlist.
+
+Immediately investigate the confirmed apex and its real same-host applications, including the Kiosk and EOA routes. Analyze all real endpoints and input parameters, create evidence-backed hypotheses, and perform controlled tests when permitted.
+
+Continue automatically through unblocked tasks. Save results as they become available, validate findings independently, and resume after timeouts without repeating completed work.
+
+**Do not return another plan. Execute the investigation, preserve evidence, and report only the work and results that actually occurred.**
