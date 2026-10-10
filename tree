@@ -1,0 +1,61 @@
+AI BUG HUNTER
+│
+├── 0. INITIALIZATION & STATE RECOVERY
+│   ├── Read previous findings and task board
+│   ├── Recover useful evidence and unfinished tasks
+│   ├── Verify real tools, MCP schemas, and permissions
+│   └── Establish completion criteria
+│
+├── 1. ROOT DOMAIN & SCOPE
+│   ├── Verify official program policy
+│   ├── Passive root-domain reconnaissance
+│   ├── Certificate Transparency / DNS / Wayback
+│   ├── Discover and deduplicate child hostnames
+│   └── Scope gate for EACH hostname
+│       ├── IN_SCOPE_CONFIRMED → Continue
+│       ├── SCOPE_UNVERIFIED → Passive research only
+│       └── OUT_OF_SCOPE → Exclude
+│
+├── 2. PER-HOST ASSESSMENT LOOP
+│   ├── Reconnaissance
+│   ├── Routes / APIs / Forms / JavaScript
+│   ├── Application architecture
+│   ├── Threat model and trust boundaries
+│   ├── Root-cause hypothesis
+│   ├── Minimal controlled test
+│   ├── Actual tool execution
+│   ├── Evidence and negative controls
+│   └── Finding disposition
+│
+├── 3. ARCHITECTURE-DRIVEN TEST BRANCHES
+│   ├── Identity / Authentication / Sessions
+│   ├── Authorization / IDOR / Multi-tenancy
+│   ├── Injection / XSS / Template Processing
+│   ├── APIs / GraphQL / WebSockets
+│   ├── SSRF / Files / Deserialization
+│   ├── CORS / CSRF / Browser Security
+│   ├── HTTP / Caching / Redirects
+│   ├── Business Logic / Workflow / Race Conditions
+│   ├── Cloud / Configuration / Dependencies
+│   └── AI/LLM Security — only if applicable
+│
+├── 4. EXECUTION & ORCHESTRATION
+│   ├── Browser MCP / Playwright
+│   ├── Burp MCP / permitted scanning
+│   ├── CLI / source analysis
+│   ├── Parallel specialized subagents
+│   └── Recovery from timeouts and write failures
+│
+├── 5. VALIDATION
+│   ├── Reproduce actual behavior
+│   ├── Verify security-boundary violation
+│   ├── Demonstrate meaningful impact
+│   ├── Eliminate alternative explanations
+│   └── Independent review where practical
+│
+└── 6. COMPLETION GATE
+    ├── Evidence-backed findings
+    ├── Rejected / blocked / untested hypotheses
+    ├── Verified artifacts
+    ├── Consistent task board and logs
+    └── Honest final report
